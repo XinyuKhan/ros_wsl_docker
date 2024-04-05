@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  ros_humble_wsl:
+    build: .
+    image: ros_humble_wsl_img
+    container_name: ros_humble_wsl
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    privileged: true
+    network_mode: host
+    ipc: host
+    pid: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - PULSE_SERVER=${PULSE_SERVER}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - /usr/lib/wsl:/usr/lib/wsl
+      - /mnt/wslg:/mnt/wslg
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
+    tty: true
+    restart: unless-stopped
+
