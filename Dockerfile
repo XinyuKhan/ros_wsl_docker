@@ -29,6 +29,17 @@ ENV MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
 #    /usr/lib/x86_64-linux-gnu/libcudadebugger.so*
 
 
+# Tools
+RUN apt-get update && apt-get -y install \
+    vim \
+    git \
+    curl \
+    wget \
+    zsh \
+    tmux \
+    && apt-get -y autoremove \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # USER
@@ -55,7 +66,7 @@ WORKDIR /home/$USERNAME
 
 # Oh My Zsh
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
-    -t https://github.com/denysdovhan/spaceship-prompt \
+    -t https://github.com/romkatv/powerlevel10k.git \
     -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
     -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
     -p git \
