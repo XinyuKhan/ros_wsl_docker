@@ -1,7 +1,11 @@
 version: '3.8'
 services:
   ros_humble_wsl:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - USERNAME=user
     image: ros_humble_wsl_img
     container_name: ros_humble_wsl
     deploy:
@@ -26,6 +30,7 @@ services:
       - /usr/lib/wsl:/usr/lib/wsl
       - /mnt/wslg:/mnt/wslg
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
+      - ${HOME}/Projects:/home/user/Projects
     tty: true
     restart: unless-stopped
 
