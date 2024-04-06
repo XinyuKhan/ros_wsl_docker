@@ -41,6 +41,23 @@ RUN apt-get update && apt-get -y install \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+# perf
+RUN apt-get update && apt-get -y install \
+    build-essential \
+    flex \
+    bison \
+    libssl-dev \
+    libelf-dev \
+    libbabeltrace-dev \
+    libunwind-dev \
+    libdw-dev \
+    binutils-dev \
+    libiberty-dev \
+    && \
+    git clone --depth=1 https://github.com/microsoft/WSL2-Linux-Kernel.git /tmp/linux-kernel && \
+    cd /tmp/linux-kernel/tools/perf && make && cp perf /usr/bin/ && \
+    cd /tmp && rm -rf linux-kernel
+
 
 # USER
 ARG USERNAME=user
