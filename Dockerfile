@@ -87,6 +87,7 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
     -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
     -p git \
+    -p history \
     -p https://github.com/zsh-users/zsh-autosuggestions \
     -p https://github.com/zsh-users/zsh-completions \
     -p https://github.com/zsh-users/zsh-history-substring-search \
@@ -95,5 +96,6 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
     -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
     -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
 
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc
 
-
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
