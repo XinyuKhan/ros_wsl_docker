@@ -1,7 +1,12 @@
-FROM osrf/ros:humble-desktop
+FROM osrf/ros:humble-desktop-full
 
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive && \
+    apt upgrade -y
 
-RUN apt-get update && apt-get -y upgrade && apt-get -y install \
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive && \
+    apt install -y \
     libxext-dev \
     libx11-dev \
     libglvnd-dev \
@@ -13,9 +18,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install \
     libgles2-mesa-dev \
     freeglut3-dev \
     mesa-utils \
-    mesa-utils-extra \
-    && apt-get -y autoremove \
-    && apt-get clean
+    mesa-utils-extra
 
 ENV LD_LIBRARY_PATH=/usr/lib/wsl/lib
 ENV LIBVA_DRIVER_NAME=d3d12
@@ -30,19 +33,20 @@ ENV MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
 
 
 # Tools
-RUN apt-get update && apt-get -y install \
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive && \
+    apt install -y \
     vim \
     git \
     curl \
     wget \
     zsh \
-    tmux \
-    && apt-get -y autoremove \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/*
+    tmux
 
 # perf
-RUN apt-get update && apt-get -y install \
+RUN apt update && \
+    DEBIAN_FRONTEND=noninteractive && \
+    apt install -y \
     build-essential \
     flex \
     bison \
@@ -53,8 +57,9 @@ RUN apt-get update && apt-get -y install \
     libdw-dev \
     binutils-dev \
     libiberty-dev \
-    && \
-    git clone --depth=1 https://github.com/microsoft/WSL2-Linux-Kernel.git /tmp/linux-kernel && \
+    libtraceevent-dev
+
+RUN git clone --depth=1 https://github.com/microsoft/WSL2-Linux-Kernel.git /tmp/linux-kernel && \
     cd /tmp/linux-kernel/tools/perf && make && cp perf /usr/bin/ && \
     cd /tmp && rm -rf linux-kernel
 
@@ -82,20 +87,21 @@ WORKDIR /home/$USERNAME
 
 
 # Oh My Zsh
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
-    -t https://github.com/romkatv/powerlevel10k.git \
-    -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
-    -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
-    -p git \
-    -p history \
-    -p https://github.com/zsh-users/zsh-autosuggestions \
-    -p https://github.com/zsh-users/zsh-completions \
-    -p https://github.com/zsh-users/zsh-history-substring-search \
-    -p https://github.com/zsh-users/zsh-syntax-highlighting \
-    -p 'history-substring-search' \
-    -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
-    -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
+# RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+#     -t https://github.com/romkatv/powerlevel10k.git \
+#     -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
+#     -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
+#     -p git \
+#     -p history \
+#     -p https://github.com/zsh-users/zsh-autosuggestions \
+#     -p https://github.com/zsh-users/zsh-completions \
+#     -p https://github.com/zsh-users/zsh-history-substring-search \
+#     -p https://github.com/zsh-users/zsh-syntax-highlighting \
+#     -p 'history-substring-search' \
+#     -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
+#     -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
 
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc
+# RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc
+
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
