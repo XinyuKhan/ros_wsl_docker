@@ -24,13 +24,6 @@ ENV LD_LIBRARY_PATH=/usr/lib/wsl/lib
 ENV LIBVA_DRIVER_NAME=d3d12
 ENV MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
 
-# 此处为了解决nv驱动报错问题，如果没有报错直接忽略
-#RUN rm -rf \
-#    /usr/lib/x86_64-linux-gnu/libcuda.so* \
-#    /usr/lib/x86_64-linux-gnu/libnvcuvid.so* \
-#    /usr/lib/x86_64-linux-gnu/libnvidia-*.so* \
-#    /usr/lib/x86_64-linux-gnu/libcudadebugger.so*
-
 
 # Tools
 RUN apt update && \
@@ -41,7 +34,11 @@ RUN apt update && \
     curl \
     wget \
     zsh \
-    tmux
+    tmux \
+    htop \
+    gdb \
+    ros-humble-gazebo-ros-pkgs \
+    libpoco-dev
 
 # perf
 RUN apt update && \
@@ -87,21 +84,21 @@ WORKDIR /home/$USERNAME
 
 
 # Oh My Zsh
-# RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
-#     -t https://github.com/romkatv/powerlevel10k.git \
-#     -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
-#     -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
-#     -p git \
-#     -p history \
-#     -p https://github.com/zsh-users/zsh-autosuggestions \
-#     -p https://github.com/zsh-users/zsh-completions \
-#     -p https://github.com/zsh-users/zsh-history-substring-search \
-#     -p https://github.com/zsh-users/zsh-syntax-highlighting \
-#     -p 'history-substring-search' \
-#     -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
-#     -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
+COPY ./zsh-in-docker.sh /tmp/zsh-in-docker.sh
+RUN sh /tmp/zsh-in-docker.sh -- \
+    -t https://github.com/romkatv/powerlevel10k.git \
+    -a 'SPACESHIP_PROMPT_ADD_NEWLINE="false"' \
+    -a 'SPACESHIP_PROMPT_SEPARATE_LINE="false"' \
+    -p git \
+    -p history \
+    -p https://github.com/zsh-users/zsh-autosuggestions \
+    -p https://github.com/zsh-users/zsh-completions \
+    -p https://github.com/zsh-users/zsh-history-substring-search \
+    -p https://github.com/zsh-users/zsh-syntax-highlighting \
+    -p 'history-substring-search' \
+    -a 'bindkey "\$terminfo[kcuu1]" history-substring-search-up' \
+    -a 'bindkey "\$terminfo[kcud1]" history-substring-search-down'
 
-# RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc
-
-
-RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc && \
+    echo "eval \"\$(register-python-argcomplete3 ros2)\"" >> ~/.zshrc && \
+    echo "eval \"\$(register-python-argcomplete3 colcon)\"" >> ~/.zshrc

@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
       args:
         - USERNAME=user
+        - HTTP_PROXY=http://host.docker.internal:${HOST_PROXY_PORT:-10809}
+        - HTTPS_PROXY=http://host.docker.internal:${HOST_PROXY_PORT:-10809}
     image: ros_humble_wsl_img
     container_name: ros_humble_wsl
     deploy:
@@ -13,7 +15,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
     privileged: true
     network_mode: host
@@ -24,13 +26,15 @@ services:
       - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
       - PULSE_SERVER=${PULSE_SERVER}
       - QT_X11_NO_MITSHM=1
+      - PATH=$PATH:/home/${USERNAME}/clion/bin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
       - /usr/lib/wsl:/usr/lib/wsl
       - /mnt/wslg:/mnt/wslg
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
-      - ${HOME}/Projects:/home/user/Projects
+      - ${WORKSPACE_PATH}:/home/${USERNAME}/workspace
+      - ${CLION_PATH}:/home/${USERNAME}/clion
     tty: true
     restart: unless-stopped
 

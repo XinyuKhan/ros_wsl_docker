@@ -1,0 +1,21 @@
+{
+  "name": "My Composed Dev Container",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "ros_humble_wsl",
+  "workspaceFolder": "/home/user/Projects",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/zsh",
+        "extensions": [
+          "dbaeumer.vscode-eslint"
+        ]
+      }
+    }
+  },
+  "forwardPorts": [
+    3000
+  ],
+  "postCreateCommand": "echo 'Container started'",
+  "shutdownAction": "stopCompose"
+}
