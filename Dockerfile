@@ -37,6 +37,7 @@ RUN apt update && \
     tmux \
     htop \
     gdb \
+    net-tools \
     ros-humble-gazebo-ros-pkgs \
     libpoco-dev
 
@@ -101,4 +102,5 @@ RUN sh /tmp/zsh-in-docker.sh -- \
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.zsh" >> ~/.zshrc && \
     echo "eval \"\$(register-python-argcomplete3 ros2)\"" >> ~/.zshrc && \
-    echo "eval \"\$(register-python-argcomplete3 colcon)\"" >> ~/.zshrc
+    echo "eval \"\$(register-python-argcomplete3 colcon)\"" >> ~/.zshrc && \
+    echo "export PATH=\$PATH:/home/$USERNAME/clion/bin" >> ~/.zshrc

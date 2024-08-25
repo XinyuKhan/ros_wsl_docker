@@ -26,7 +26,6 @@ services:
       - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
       - PULSE_SERVER=${PULSE_SERVER}
       - QT_X11_NO_MITSHM=1
-      - PATH=$PATH:/home/${USERNAME}/clion/bin
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev:/dev
