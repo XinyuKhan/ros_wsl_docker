@@ -39,7 +39,13 @@ RUN apt update && \
     gdb \
     net-tools \
     ros-humble-gazebo-ros-pkgs \
-    libpoco-dev
+    libpoco-dev \
+    python3-pip
+
+RUN pip3 install -U \
+    trimesh \
+    shapely \
+    manifold3d
 
 # perf
 RUN apt update && \
